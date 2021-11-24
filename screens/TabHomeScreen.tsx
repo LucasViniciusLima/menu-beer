@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import Drinks from '../components/Drinks';
+import NavTop from '../components/NavTop';
 import { Text, View } from '../components/Themed';
 
-export default function TabTwoScreen() {
+export default function TabHomeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <NavTop></NavTop>
+      <View style={styles.viewArea}>
+        <Drinks />
+      </View>
     </View>
   );
 }
@@ -29,4 +30,9 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  viewArea: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#313131'
+  }
 });

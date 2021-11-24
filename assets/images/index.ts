@@ -1,0 +1,1 @@
+export const drinksAds = require("./drinksAds.png");

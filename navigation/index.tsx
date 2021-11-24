@@ -9,15 +9,19 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
-
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
+import DrinkDetail from '../screens/DrinkDetail';
+import DrinkList from '../screens/DrinkList';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import TabHomeScreen from '../screens/TabHomeScreen';
+import TabShoppingCartScreen from '../screens/TabShoppingCartScreen';
+import LoginScreen from '../screens/LoginScreen';
+import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import Cadastro from '../screens/Cadastro';
+import Constants from 'expo-constants'
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -40,9 +44,6 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -58,40 +59,33 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}>
+      initialRouteName="TabHomeScreen"
+      screenOptions={{ tabBarActiveTintColor: Colors[colorScheme].tint, tabBarShowLabel: false }}
+    >
+
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
-      />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="TabHomeScreen"
+        component={TabHomeScreenNavigator}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home', tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
+
+      <BottomTab.Screen
+        name="TabShoppingCartScreen"
+        component={TabShoppingCartScreenNavigator}
+        options={{
+          title: 'Carrinho', tabBarIcon: ({ color }) => <TabBarIcon name="shopping-cart" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="LoginScreen"
+        component={LoginScreenNavigator}
+        options={{
+          title: 'Usuario', tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />
+        }}
+      />
+
     </BottomTab.Navigator>
   );
 }
@@ -104,4 +98,60 @@ function TabBarIcon(props: {
   color: string;
 }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+}
+
+// Each tab has its own navigation stack, you can read more about this pattern here:
+// https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
+
+
+
+export type TabHomeParamList = {
+  TabHomeScreen: undefined;
+  DrinkDetail: undefined;
+  DrinkList: undefined;
+  LoginScreen: undefined;
+}
+
+const TabHomeStack = createNativeStackNavigator<TabHomeParamList>();
+
+function TabHomeScreenNavigator() {
+  return (
+    <TabHomeStack.Navigator screenOptions={{ headerBackTitleVisible: false }}>
+      <TabHomeStack.Screen name="TabHomeScreen" component={TabHomeScreen} options={{ headerTitle: '', headerShown: false }} />
+      <TabHomeStack.Screen name="DrinkDetail" component={DrinkDetail} options={{ headerTitle: '' }} />
+      <TabHomeStack.Screen name="DrinkList" component={DrinkList} options={{ headerTitle: '' }} />
+    </TabHomeStack.Navigator>
+  );
+}
+
+export type TabShoppingCartParamList = {
+  TabShoppingCartScreen: undefined;
+  LoginScreen: undefined;
+}
+
+const TabShoppingCart = createNativeStackNavigator<TabShoppingCartParamList>();
+
+function TabShoppingCartScreenNavigator() {
+  return (
+    <TabShoppingCart.Navigator screenOptions={{ headerBackTitleVisible: false }}>
+      <TabShoppingCart.Screen name="TabShoppingCartScreen" component={TabShoppingCartScreen} options={{ headerTitle: '', headerShown: false }} />
+
+    </TabShoppingCart.Navigator>
+  );
+}
+
+export type LoginScreenParamList = {
+  LoginScreen: undefined;
+  Cadastro: undefined;
+}
+
+const Login = createNativeStackNavigator<LoginScreenParamList>();
+
+function LoginScreenNavigator() {
+  return (
+    <Login.Navigator screenOptions={{ headerBackTitleVisible: false }}>
+      <Login.Screen name="LoginScreen" component={LoginScreen} options={{ headerTitle: '', headerShown: false }} />
+      <Login.Screen name="Cadastro" component={Cadastro} options={{ headerTitle: 'Cadastro' }} />
+    </Login.Navigator>
+  );
 }
