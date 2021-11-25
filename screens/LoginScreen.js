@@ -6,6 +6,7 @@ import LoginUser from '../constants/LoginUser';
 
 const userImg = require("./../assets/icons/user.png");
 import db from '../config/firebase/config';
+import NavTop from '../components/NavTop';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
@@ -57,13 +58,16 @@ export default function LoginScreen() {
                 cidade: cidade
             }
         };
+        LoginUser.user = nUser;
         await userDoc.doc(email).set(nUser);
         setUser(nUser);
         setEditando(false);
     }
 
     if (!login) return (
+        
         <View style={style.container}>
+            <NavTop></NavTop>
             <Image
                 source={userImg}
                 style={style.img}
@@ -96,12 +100,13 @@ export default function LoginScreen() {
     );
     else return (
         <View style={{ flex: 1 }}>
+            <NavTop></NavTop>
             <View style={style.headerBlock}>
                 <Image source={userImg} style={style.img2} />
                 <View>
-                    <Text style={style.defaultText}>Nome: {user?.name}</Text>
+                    <Text style={[style.defaultText,{fontSize:22}]}>{user?.name}</Text>                    
+                    <Text style={[style.defaultText,{fontWeight:'bold'}]}>{email}</Text>
                     <Text style={style.defaultText}>Telefone: {user?.telefone}</Text>
-                    <Text style={style.defaultText}>E-mail: {email}</Text>
                 </View>
             </View>
             <View style={style.logBodyAddress}>
@@ -193,7 +198,7 @@ export default function LoginScreen() {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#313131'
     },
@@ -241,7 +246,7 @@ const style = StyleSheet.create({
     img: {
         width: 150,
         height: 150,
-        marginBottom: 10,
+        margin: 10,
         backgroundColor: '#333',
         borderRadius: 222
     },

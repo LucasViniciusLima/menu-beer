@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import LoginUser from "../../constants/LoginUser";
-
 const redIcon = require("../../assets/icons/red_icon_V4.png");
 const user = require("../../assets/icons/user.png");
 
@@ -13,12 +12,10 @@ class NavTop extends Component {
     super(props);
     this.state = {
       nome: this.props.data?.nome,
-      endereco: this.props.data?.endereco,      
+      endereco: LoginUser.user?.endereco?.rua+' '+LoginUser.user?.endereco?.numero
     };
-    this.state.endereco = "Rua Lorem Ipsum 0001";
   }
-  render() {
-    
+  render() {    
     return (
       <View style={styles.navBody}>
         <View>
@@ -27,12 +24,7 @@ class NavTop extends Component {
           </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.addArea}>
-          <View>
-            <Text style={[styles.whiteText, styles.txtAlignEnd]}>Endereço</Text>
-            <Text style={[styles.orangeText, styles.txtAlignEnd]}>
-              {this.state.endereco}
-            </Text>
-          </View>
+          
         </TouchableOpacity>
         <TouchableOpacity>
           <View>
